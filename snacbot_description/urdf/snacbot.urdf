@@ -336,35 +336,40 @@
     <parent link="world"/>
     <child link="base_link"/>
   </joint>
-  <joint name="waist_joint" type="continuous">
+  <joint name="waist_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.0 0.0 0.073675"/>
     <parent link="base_link"/>
     <child link="shoulder_link"/>
     <axis xyz="0.0 0.0 1.0"/>
+    <limit lower="-3.14" upper="3.14" effort="300" velocity="4.01" />
   </joint>
-  <joint name="shoulder_joint" type="continuous">
+  <joint name="shoulder_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.0 -0.009 0.04"/>
     <parent link="shoulder_link"/>
     <child link="arm_link"/>
     <axis xyz="0.0 1.0 0.0"/>
+    <limit lower="-1.85" upper="1.85" effort="300" velocity="4.01" />
   </joint>
-  <joint name="elbow_joint" type="continuous">
+  <joint name="elbow_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.027 -0.011075 0.2042"/>
     <parent link="arm_link"/>
     <child link="forearm_link"/>
     <axis xyz="0.0 -1.0 0.0"/>
+    <limit lower="-1.5" upper="1.6" effort="300" velocity="4.01" />
   </joint>
-  <joint name="wrist_joint" type="continuous">
+  <joint name="wrist_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.1808 0.000425 0.0125"/>
     <parent link="forearm_link"/>
     <child link="hand_link"/>
     <axis xyz="-0.0 -1.0 0.0"/>
+    <limit lower="-1.6" upper="1.85" effort="300" velocity="4.01" />
   </joint>
-  <joint name="palm_joint" type="continuous">
+  <joint name="palm_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.06531 0.0201 -5e-05"/>
     <parent link="hand_link"/>
     <child link="palm_link"/>
     <axis xyz="1.0 0.0 0.0"/>
+    <limit lower="-1.6" upper="1.6" effort="300" velocity="4.01" />
   </joint>
   <joint name="gripper_joint" type="continuous">
     <origin rpy="0 0 0" xyz="0.04704 0.000306 -0.0208"/>
