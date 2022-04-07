@@ -1,0 +1,18 @@
+controller_list:
+  - name: fake_snacbot_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - waist_joint
+      - shoulder_joint
+      - elbow_joint
+      - wrist_joint
+  - name: fake_snacbot_hand_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - palm_joint
+      - finger1_joint
+      - finger2_joint
+      - gripper_joint
+initial:  # Define initial robot poses per group
+  - group: snacbot_arm
+    pose: home

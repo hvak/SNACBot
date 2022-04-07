@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: snacbot_description
+    relative_path: urdf/snacbot.urdf
+    xacro_args: ""
+  SRDF:
+    relative_path: config/snacbot.srdf
+  CONFIG:
+    author_name: Hersh Vakharia
+    author_email: hershv@umich.edu
+    generated_timestamp: 1649298879
