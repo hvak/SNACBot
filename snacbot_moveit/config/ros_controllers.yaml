@@ -10,9 +10,11 @@ controller_list:
       - wrist_joint
       - palm_joint
   - name: hand_controller
-    action_ns: gripper_action
-    type: GripperCommand
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
     default: true
     parallel: false
     joints:
-     - gripper_joint
+      - finger1_joint
+      - finger2_joint
+      - gripper_joint

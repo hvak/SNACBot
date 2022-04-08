@@ -74,7 +74,6 @@
     <origin xyz="-0.0 0.009 -0.113675" rpy="0 0 0"/>
 </link>
 
-
 <link name="forearm_link">
   <inertial>
     <origin xyz="0.12530362498320322 0.02051079804018362 0.007019037615682622" rpy="0 0 0"/>
@@ -201,6 +200,10 @@
   </collision>
 </link>
 
+<link name="ee_link">
+  <origin xyz="0 0 0" rpy="0 0 0"/>
+</link>
+
 <joint name="base_joint" type="fixed">
   <parent link="world" />
   <child link="base_link" />
@@ -230,7 +233,6 @@
   <mimic joint="shoulder_joint" multiplier="-1" offset="0" />
 </joint>
 
-
 <joint name="elbow_joint" type="revolute">
   <origin xyz="0.027 -0.011075 0.2042" rpy="0 0 0"/>
   <parent link="arm_link"/>
@@ -255,11 +257,12 @@
   <limit lower="-1.6" upper="1.6" effort="300" velocity="4.01" />
 </joint>
 
-<joint name="gripper_joint" type="continuous">
+<joint name="gripper_joint" type="revolute">
   <origin xyz="0.04704 0.000306 -0.0208" rpy="0 0 0"/>
   <parent link="palm_link"/>
   <child link="gripper_driving_link"/>
   <axis xyz="-0.0 -0.0 1.0"/>
+  <limit lower="0.26" upper="2.6" effort="300" velocity="4.01" />
 </joint>
 
 <joint name="finger1_joint" type="continuous">
@@ -267,6 +270,7 @@
   <parent link="palm_link"/>
   <child link="finger1_link"/>
   <axis xyz="0.0 0.0 -1.0"/>
+  <mimic joint="gripper_joint" multiplier="0.33" offset="0" />
 </joint>
 
 <joint name="finger2_joint" type="continuous">
@@ -274,6 +278,13 @@
   <parent link="palm_link"/>
   <child link="finger2_link"/>
   <axis xyz="0.0 0.0 -1.0"/>
+  <mimic joint="gripper_joint" multiplier="-0.33" offset="0" />
+</joint>
+
+<joint name="ee_joint" type="fixed">
+  <origin xyz="0.126 0.0 0.0" rpy="0 0 0"/>
+  <parent link="palm_link"/>
+  <child link="ee_link"/>
 </joint>
 
 </robot>

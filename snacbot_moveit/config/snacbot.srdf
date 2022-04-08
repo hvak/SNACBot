@@ -15,9 +15,10 @@
         <joint name="shoulder_joint"/>
         <joint name="elbow_joint"/>
         <joint name="wrist_joint"/>
+        <joint name="palm_joint"/>
+        <joint name="ee_joint"/>
     </group>
     <group name="snacbot_hand">
-        <joint name="palm_joint"/>
         <joint name="finger1_joint"/>
         <joint name="finger2_joint"/>
         <joint name="gripper_joint"/>
@@ -26,12 +27,24 @@
     <group_state name="home" group="snacbot_arm">
         <joint name="elbow_joint" value="0"/>
         <joint name="shoulder_joint" value="0"/>
-        <joint name="shoulder_shadow_joint" value="0"/>
         <joint name="waist_joint" value="0"/>
         <joint name="wrist_joint" value="0"/>
+        <joint name="palm_joint" value="0"/>
     </group_state>
+    <group_state name="open" group="snacbot_hand">
+        <joint name="gripper_joint" value="2.6"/>
+        <joint name="finger1_joint" value="0.858"/>
+        <joint name="finger2_joint" value="-0.858"/>
+    </group_state>
+    <group_state name="close" group="snacbot_hand">
+        <joint name="gripper_joint" value="0"/>
+        <joint name="finger1_joint" value="0"/>
+        <joint name="finger2_joint" value="0"/>
+
+    </group_state>
+
     <!--END EFFECTOR: Purpose: Represent information about an end effector.-->
-    <end_effector name="snacbot_ee" parent_link="palm_link" group="snacbot_hand" parent_group="snacbot_arm"/>
+    <end_effector name="snacbot_ee" parent_link="ee_link" group="snacbot_hand"/>
     <!--VIRTUAL JOINT: Purpose: this element defines a virtual joint between a robot link and an external frame of reference (considered fixed with respect to the robot)-->
     <virtual_joint name="virtual_joint" type="fixed" parent_frame="world" child_link="base_link"/>
     <!--DISABLE COLLISIONS: By default it is assumed that any link of the robot could potentially come into collision with any other link in the robot. This tag disables collision checking between a specified pair of links. -->

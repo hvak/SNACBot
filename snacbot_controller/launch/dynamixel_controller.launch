@@ -27,6 +27,6 @@
       <remap from="/dynamixel_workbench/dynamixel_state" to="dynamixel_state"/>
     </node>
 
-    <node name="arm_controller_driver" pkg="snacbot_controller" type="dynamixel_controller_spawner.py" output="screen" args="arm_controller"/>
-    <!--<node name="gripper_controller_driver" pkg="snacbot_controller" type="dynamixel_controller_spawner.py" output="screen" args="gripper_controller"/>-->
+    <node name="arm_controller_driver" pkg="snacbot_controller" type="arm_controller_spawner.py" output="screen" args="arm_controller"/>
+    <node name="hand_controller_driver" pkg="snacbot_controller" type="hand_controller_spawner.py" output="screen" args="hand_controller"/>
   </launch>

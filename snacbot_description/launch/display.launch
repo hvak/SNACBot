@@ -2,7 +2,8 @@
   <arg name="model" default="$(find snacbot_description)/urdf/snacbot.xacro"/>
   <arg name="gui" default="true"/>
   <arg name="rvizconfig" default="$(find snacbot_description)/launch/urdf.rviz"/>
-  <param name="robot_description" command="$(find xacro)/xacro $(arg model)"/>
+  <!--<param name="robot_description" command="(find xacro)/xacro $(arg model)"/>-->
+  <param name="robot_description" textfile="$(find snacbot_description)/urdf/snacbot.urdf"/>
   <param name="use_gui" value="$(arg gui)"/>
   <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>
   <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"/>
