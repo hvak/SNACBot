@@ -57,5 +57,7 @@
     <disable_collisions link1="forearm_link" link2="hand_link" reason="Adjacent"/>
     <disable_collisions link1="gripper_driving_link" link2="hand_link" reason="Never"/>
     <disable_collisions link1="gripper_driving_link" link2="palm_link" reason="Adjacent"/>
+    <disable_collisions link1="finger1_link" link2="palm_link" reason="Adjacent"/>
+    <disable_collisions link1="finger2_link" link2="palm_link" reason="Adjacent"/>
     <disable_collisions link1="hand_link" link2="palm_link" reason="Adjacent"/>
 </robot>

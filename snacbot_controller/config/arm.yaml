@@ -4,27 +4,35 @@
 waist_joint:
   ID: 0
   Return_Delay_Time: 250
+  Moving_Speed: 150
 
 shoulder_shadow_joint:
   ID: 1
   Return_Delay_Time: 250
+  Moving_Speed: 150
 
 shoulder_joint:
   ID: 2
   Return_Delay_Time: 250
+  Moving_Speed: 150
 
 elbow_joint:
   ID: 3
   Return_Delay_Time: 250
+  Moving_Speed: 150
+
 
 wrist_joint:
   ID: 4
   Return_Delay_Time: 250
+  Moving_Speed: 150
 
 palm_joint:
   ID: 5
   Return_Delay_Time: 250
+  Moving_Speed: 150
 
 gripper_joint:
   ID: 6
   Return_Delay_Time: 250  
+  Moving_Speed: 150

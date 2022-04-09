@@ -36,14 +36,18 @@ class JointTrajectoryActionServer(object):
         jt.header.stamp = rospy.Time.now()
         jt.joint_names = list(goal.trajectory.joint_names)
         
-        jt.joint_names.append("shoulder_shadow_joint")
-        shoulder_idx = 0
+        #make sure shoulder joint exists
+        shoulder_idx = -1
         i = 0
         for joint in jt.joint_names:
             if joint == "shoulder_joint":
                 shoulder_idx = i
                 break
             i += 1
+
+        #add shadow joint if so
+        if shoulder_idx != -1:
+            jt.joint_names.append("shoulder_shadow_joint")
 
         jt.points = []
         for point in goal.trajectory.points:
@@ -55,9 +59,11 @@ class JointTrajectoryActionServer(object):
             jtp.effort = list(point.effort)
             jtp.time_from_start = point.time_from_start
 
-            jtp.positions.append(-jtp.positions[shoulder_idx])
-            jtp.velocities.append(-jtp.velocities[shoulder_idx])
-            jtp.accelerations.append(-jtp.accelerations[shoulder_idx])
+            #add negative of shoulder joint so shadow joint moves opposite
+            if shoulder_idx != -1:
+                jtp.positions.append(-jtp.positions[shoulder_idx])
+                jtp.velocities.append(-jtp.velocities[shoulder_idx])
+                jtp.accelerations.append(-jtp.accelerations[shoulder_idx])
 
             jt.points.append(jtp)
 
