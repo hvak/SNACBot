@@ -1,10 +1,13 @@
-from re import S
 import sys
 import copy
+
+from sympy import Quaternion
+
 import rospy
 import moveit_commander
 import moveit_msgs.msg
 import geometry_msgs.msg
+import tf
 
 try:
     from math import pi, tau, dist, fabs, cos
@@ -85,16 +88,46 @@ class SNACBotMoveitInterface(object):
         print("============ Printing robot state")
         print(self.robot.get_current_state())
         print("")
+    
+    def construct_pose(self, x, y, z, roll , pitch, yaw):
+        quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
+        pose = geometry_msgs.msg.Pose()
+        pose.orientation.x = quaternion[0]
+        pose.orientation.y = quaternion[1]
+        pose.orientation.z = quaternion[2]
+        pose.orientation.w = quaternion[3]
+        pose.position.x = x
+        pose.position.y = y
+        pose.position.z = z
+        return pose
 
     def go_to_pose_goal(self, pose_goal):
+
+        current_pose = self.arm_group.get_current_pose()
+
+        # constraint = moveit_msgs.msg.Constraints()
+        # constraint.name = "any gripper yaw"
+        # ee_constraint = moveit_msgs.msg.OrientationConstraint()
+        # ee_constraint.header = current_pose.header
+        # ee_constraint.link_name = "ee_link"
+        # ee_constraint.orientation.x = quaternion[0]
+        # ee_constraint.orientation.y = quaternion[1]
+        # ee_constraint.orientation.z = quaternion[2]
+        # ee_constraint.orientation.w = quaternion[3]
+        # ee_constraint.absolute_x_axis_tolerance = 0.1
+        # ee_constraint.absolute_y_axis_tolerance = 0.1
+        # ee_constraint.absolute_z_axis_tolerance = 2 * pi
+        # ee_constraint.weight = 1
+        # constraint.orientation_constraints.append(ee_constraint)
+        # self.arm_group.set_path_constraints(constraint)
+
         self.arm_group.set_pose_target(pose_goal)
-        self.arm_group.set_goal_tolerance(0.01)
         plan = self.arm_group.go(wait=True)
         self.arm_group.stop()
         self.arm_group.clear_pose_targets()
+        self.arm_group.clear_path_constraints()
 
         current_pose = self.arm_group.get_current_pose().pose
-
         return all_close(pose_goal, current_pose, 0.01)
 
     def execute_plan(self, plan):
@@ -118,16 +151,16 @@ if __name__ == "__main__":
     snacbot_interface = SNACBotMoveitInterface()
 
     print("============ Generating plan 1")
-    pose_target = geometry_msgs.msg.Pose()
-    pose_target.orientation.x = -0.002
-    pose_target.orientation.y = -0.213
-    pose_target.orientation.z = 0.976
-    pose_target.orientation.w = 0.041
-    pose_target.position.x = -0.1
-    pose_target.position.y = 0.008
-    pose_target.position.z = 0.36
+    x = 0.1
+    y = -0.1
+    z = 0
+    roll = 0
+    pitch = 1.57
+    yaw = 0
 
-    print(snacbot_interface.go_to_pose_goal(pose_target))
+    pose = snacbot_interface.construct_pose(x, y, z, roll, pitch, yaw)
+
+    print(snacbot_interface.go_to_pose_goal(pose))
 
 
 
