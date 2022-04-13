@@ -29,9 +29,9 @@ class JointTrajectoryActionServer(object):
         self._feedback = FollowJointTrajectoryFeedback
         self._result = FollowJointTrajectoryResult
 
-        
     def execute_cb(self, goal):
         rospy.loginfo('Receving controller trajectories...')
+        print(type(goal))
         jt = JointTrajectory()
         jt.header.stamp = rospy.Time.now()
         jt.joint_names = list(goal.trajectory.joint_names)
@@ -49,6 +49,8 @@ class JointTrajectoryActionServer(object):
         if shoulder_idx != -1:
             jt.joint_names.append("shoulder_shadow_joint")
 
+        duration = rospy.Duration(0)
+
         jt.points = []
         for point in goal.trajectory.points:
 
@@ -58,6 +60,7 @@ class JointTrajectoryActionServer(object):
             jtp.accelerations = list(point.accelerations)
             jtp.effort = list(point.effort)
             jtp.time_from_start = point.time_from_start
+            duration = jtp.time_from_start
 
             #add negative of shoulder joint so shadow joint moves opposite
             if shoulder_idx != -1:
@@ -69,7 +72,9 @@ class JointTrajectoryActionServer(object):
 
         self.dx_trajectory_pub.publish(jt)
         result_ = FollowJointTrajectoryResult()
+        rospy.sleep(duration)
         self._as.set_succeeded(result_)
+
         rospy.loginfo('Joint trajectories has been successfuly transmitted to dynamixel branch.')
 
 
