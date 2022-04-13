@@ -55,11 +55,13 @@ def all_close(goal, actual, tolerance):
 
 
 class SNACBotMoveitInterface(object):
-    def __init__(self):
+    def __init__(self, debug=True):
         super(SNACBotMoveitInterface, self).__init__()
 
         moveit_commander.roscpp_initialize(sys.argv)
         rospy.init_node("snacbot_moveit_interface", anonymous=True)
+
+        self.debug = debug
 
         self.robot = moveit_commander.RobotCommander()
         self.scene = moveit_commander.PlanningSceneInterface()
@@ -73,22 +75,23 @@ class SNACBotMoveitInterface(object):
         self.display_trajectory_publisher = rospy.Publisher("/move_group/display_planned_path", moveit_msgs.msg.DisplayTrajectory, queue_size=20)
 
         self.planning_frame = self.arm_group.get_planning_frame()
-        print("============ Planning frame: %s" % self.planning_frame)
+        if debug: print("============ Planning frame: %s" % self.planning_frame)
 
         # We can also print the name of the end-effector link for this group:
         self.eef_link = self.arm_group.get_end_effector_link()
-        print("============ End effector link: %s" % self.eef_link)
+        if debug: print("============ End effector link: %s" % self.eef_link)
 
         # We can get a list of all the groups in the robot:
         self.group_names = self.robot.get_group_names()
-        print("============ Available Planning Groups:", self.group_names)
+        if debug: print("============ Available Planning Groups:", self.group_names)
 
         # Sometimes for debugging it is useful to print the entire state of the
         # robot:
-        print("============ Printing robot state")
-        print(self.robot.get_current_state())
-        print("")
+        if debug: print("============ Printing robot state")
+        if debug: print(self.robot.get_current_state())
+        if debug: print("")
     
+    #create pose msg from xyz and rpy
     def construct_pose(self, x, y, z, roll , pitch, yaw):
         quaternion = tf.transformations.quaternion_from_euler(roll, pitch, yaw)
         pose = geometry_msgs.msg.Pose()
@@ -101,67 +104,82 @@ class SNACBotMoveitInterface(object):
         pose.position.z = z
         return pose
 
-    def go_to_pose_goal(self, pose_goal):
+    def reached_goal(self, pose_goal, thresh):
+        current_pose = self.arm_group.get_current_pose().pose
+        return all_close(pose_goal, current_pose, thresh)
 
-        current_pose = self.arm_group.get_current_pose()
+    def goal_pose_valid(self, pose):
+        self.arm_group.set_pose_target(pose)
+        plan = self.arm_group.plan()
+        self.arm_group.clear_pose_targets()
+        return plan[0]
 
-        # constraint = moveit_msgs.msg.Constraints()
-        # constraint.name = "any gripper yaw"
-        # ee_constraint = moveit_msgs.msg.OrientationConstraint()
-        # ee_constraint.header = current_pose.header
-        # ee_constraint.link_name = "ee_link"
-        # ee_constraint.orientation.x = quaternion[0]
-        # ee_constraint.orientation.y = quaternion[1]
-        # ee_constraint.orientation.z = quaternion[2]
-        # ee_constraint.orientation.w = quaternion[3]
-        # ee_constraint.absolute_x_axis_tolerance = 0.1
-        # ee_constraint.absolute_y_axis_tolerance = 0.1
-        # ee_constraint.absolute_z_axis_tolerance = 2 * pi
-        # ee_constraint.weight = 1
-        # constraint.orientation_constraints.append(ee_constraint)
-        # self.arm_group.set_path_constraints(constraint)
-
-        self.arm_group.set_pose_target(pose_goal)
-        plan = self.arm_group.go(wait=True)
+    #goes to predfined group states (as defined in srdf)
+    def go_to_group_state(self, group_name):
+        if self.debug: print("Going to group state: ", group_name)
+        self.arm_group.set_named_target(group_name)
+        success = self.arm_group.go(wait=True)
         self.arm_group.stop()
         self.arm_group.clear_pose_targets()
-        self.arm_group.clear_path_constraints()
+        return success
 
-        current_pose = self.arm_group.get_current_pose().pose
-        return all_close(pose_goal, current_pose, 0.01)
+    #go to a specified pose
+    def go_to_pose_goal(self, pose_goal):
+        self.arm_group.set_pose_target(pose_goal)
+        plan = self.arm_group.plan()
 
-    def execute_plan(self, plan):
-        return
+        if plan[0]:
+            if self.debug: print("Going to pose goal: ", pose_goal)
+            self.arm_group.go(wait=True)
+            self.arm_group.stop()
+            self.arm_group.clear_pose_targets()
+            return True
+        else:
+            print("Couldn't go to pose goal!")
+            return False
 
+    #not super useful rn, it seems pose targets display in rviz automatically
     def display_trajectory(self, plan):
         display_trajectory = moveit_msgs.msg.DisplayTrajectory()
         display_trajectory.trajectory_start = self.robot.get_current_state()
-        display_trajectory.trajectory.append(plan)
+        display_trajectory.trajectory.append(plan[1])
         # Publish
         self.display_trajectory_publisher.publish(display_trajectory)
 
     def open_gripper(self):
-        return
+        if self.debug: print("Opening gripper")
+        self.hand_group.set_named_target("open")
+        success = self.hand_group.go(wait=True)
+        self.hand_group.stop()
+        self.hand_group.clear_pose_targets()
+        return success
     
     def close_gripper(self):
-        return
+        if self.debug: print("Closing gripper")
+        self.hand_group.set_named_target("close")
+        success = self.hand_group.go(wait=True)
+        self.hand_group.stop()
+        self.hand_group.clear_pose_targets()
+        return success
 
 
 if __name__ == "__main__":
-    snacbot_interface = SNACBotMoveitInterface()
+    snacbot_interface = SNACBotMoveitInterface(debug=True)
 
-    print("============ Generating plan 1")
+    print("============ Generating plan")
     x = 0.1
-    y = -0.1
-    z = 0
+    y = 0.1
+    z = 0.01
     roll = 0
     pitch = 1.57
     yaw = 0
 
     pose = snacbot_interface.construct_pose(x, y, z, roll, pitch, yaw)
 
-    print(snacbot_interface.go_to_pose_goal(pose))
-
+    snacbot_interface.open_gripper()
+    snacbot_interface.go_to_pose_goal(pose)
+    snacbot_interface.close_gripper()
+    snacbot_interface.go_to_group_state("home")
 
 
 
