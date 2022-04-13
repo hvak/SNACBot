@@ -4,6 +4,8 @@
 <xacro:include filename="$(find snacbot_description)/urdf/materials.xacro" />
 <xacro:include filename="$(find snacbot_description)/urdf/snacbot.trans" />
 <xacro:include filename="$(find snacbot_description)/urdf/snacbot.gazebo" />
+<xacro:arg name="use_nominal_extrinsics" default="false" />
+<xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
 
 <link name="world"/>
 
@@ -116,6 +118,8 @@
   </collision>
 </link>
 
+
+
 <link name="palm_link">
   <inertial>
     <origin xyz="0.03514107719512616 0.00028468032824946964 0.0011739025280478876" rpy="0 0 0"/>
@@ -136,6 +140,10 @@
     </geometry>
   </collision>
 </link>
+
+<xacro:sensor_d435i parent="palm_link" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+  <origin xyz="0.04 0 0.035" rpy="0 0 0"/>
+</xacro:sensor_d435i>
 
 <link name="gripper_driving_link">
   <inertial>
