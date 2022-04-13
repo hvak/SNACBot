@@ -29,6 +29,7 @@
         <arg name="info" value="true"/>
         <arg name="debug" value="false"/>
         <arg name="load_robot_description" value="false"/>
+        <arg name="pipeline" value="ompl"/>
       </include>  
     
       <!-- Run Rviz and load the default config to see the state of the move_group node -->

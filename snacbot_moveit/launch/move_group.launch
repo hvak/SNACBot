@@ -56,10 +56,10 @@
       <arg name="pipeline" value="chomp" />
     </include>
 
-    <!-- Pilz Industrial Motion -->
+    <!-- Pilz Industrial Motion 
     <include file="$(dirname)/planning_pipeline.launch.xml">
       <arg name="pipeline" value="pilz_industrial_motion_planner" />
-    </include>
+    </include>-->
 
     <!-- Support custom planning pipeline -->
     <include if="$(eval arg('pipeline') not in ['ompl', 'chomp', 'pilz_industrial_motion_planner'])"
