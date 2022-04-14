@@ -4,6 +4,18 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <robot name="snacbot">
+  <material name="orange">
+    <color rgba="1.0 0.49411764705882355 0.0 1.000"/>
+  </material>
+  <material name="blue">
+    <color rgba="0.16470588235294117 0.3215686274509804 0.7450980392156863 1.000"/>
+  </material>
+  <material name="aluminum">
+    <color rgba="0.5 0.5 0.5 1"/>
+  </material>
+  <material name="plastic">
+    <color rgba="0.1 0.1 0.1 1"/>
+  </material>
   <link name="world"/>
   <link name="base_link">
     <inertial>
@@ -12,11 +24,11 @@
       <inertia ixx="0.002425" ixy="1e-06" ixz="-4.8e-05" iyy="0.002489" iyz="-1e-05" izz="0.003322"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 1.5707963267948966" xyz="0 0 0.1025"/>
       <geometry>
         <mesh filename="package://snacbot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -36,7 +48,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/shoulder_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 -0.0 -0.073675"/>
@@ -56,7 +68,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/arm_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.0 0.009 -0.113675"/>
@@ -65,7 +77,6 @@
       </geometry>
     </collision>
   </link>
-
   <link name="forearm_link">
     <inertial>
       <origin rpy="0 0 0" xyz="0.12530362498320322 0.02051079804018362 0.007019037615682622"/>
@@ -77,7 +88,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/forearm_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.027 0.020075 -0.317875"/>
@@ -97,7 +108,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/hand_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.2078 0.01965 -0.330375"/>
@@ -117,7 +128,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/palm_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.27311 -0.00045 -0.330325"/>
@@ -137,7 +148,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/gripper_driving_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.32015 -0.000756 -0.309525"/>
@@ -157,7 +168,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/finger1_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.30115 0.023244 -0.320325"/>
@@ -177,7 +188,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/finger2_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.30115 -0.024756 -0.320325"/>
@@ -187,74 +198,72 @@
     </collision>
   </link>
   <link name="ee_link">
-    <origin xyz="0 0 0" rpy="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0 0 0"/>
   </link>
   <joint name="base_joint" type="fixed">
     <parent link="world"/>
     <child link="base_link"/>
   </joint>
   <joint name="waist_joint" type="revolute">
-    <origin rpy="0 0 0" xyz="0.0 0.0 0.073675"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.1055"/>
     <parent link="base_link"/>
     <child link="shoulder_link"/>
     <axis xyz="0.0 0.0 1.0"/>
-    <limit lower="-3.14" upper="3.14" effort="300" velocity="4.01" />
+    <limit effort="300" lower="-3.14" upper="3.14" velocity="4.01"/>
   </joint>
   <joint name="shoulder_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.0 -0.009 0.04"/>
     <parent link="shoulder_link"/>
     <child link="arm_link"/>
     <axis xyz="0.0 1.0 0.0"/>
-    <limit lower="-1.85" upper="1.85" effort="300" velocity="4.01" />
+    <limit effort="300" lower="-1.85" upper="1.85" velocity="4.01"/>
   </joint>
   <joint name="elbow_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.027 -0.011075 0.2042"/>
     <parent link="arm_link"/>
     <child link="forearm_link"/>
     <axis xyz="0.0 -1.0 0.0"/>
-    <limit lower="-1.5" upper="1.6" effort="300" velocity="4.01" />
+    <limit effort="300" lower="-1.5" upper="1.6" velocity="4.01"/>
   </joint>
   <joint name="wrist_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.1808 0.000425 0.0125"/>
     <parent link="forearm_link"/>
     <child link="hand_link"/>
     <axis xyz="-0.0 -1.0 0.0"/>
-    <limit lower="-1.6" upper="1.85" effort="300" velocity="4.01" />
+    <limit effort="300" lower="-1.6" upper="1.85" velocity="4.01"/>
   </joint>
   <joint name="palm_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.06531 0.0201 -5e-05"/>
     <parent link="hand_link"/>
     <child link="palm_link"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit lower="-1.6" upper="1.6" effort="300" velocity="4.01" />
+    <limit effort="300" lower="-1.6" upper="1.6" velocity="4.01"/>
   </joint>
   <joint name="gripper_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.04704 0.000306 -0.0208"/>
     <parent link="palm_link"/>
     <child link="gripper_driving_link"/>
     <axis xyz="-0.0 -0.0 1.0"/>
-    <limit lower="0.26" upper="2.6" effort="300" velocity="4.01" />
+    <limit effort="300" lower="0.26" upper="2.6" velocity="4.01"/>
   </joint>
   <joint name="finger1_joint" type="continuous">
     <origin rpy="0 0 0" xyz="0.02804 -0.023694 -0.01"/>
     <parent link="palm_link"/>
     <child link="finger1_link"/>
     <axis xyz="0.0 0.0 -1.0"/>
-    <mimic joint="gripper_joint" multiplier="0.33" offset="0" />
+    <mimic joint="gripper_joint" multiplier="0.33" offset="0"/>
   </joint>
   <joint name="finger2_joint" type="continuous">
     <origin rpy="0 0 0" xyz="0.02804 0.024306 -0.01"/>
     <parent link="palm_link"/>
     <child link="finger2_link"/>
     <axis xyz="0.0 0.0 -1.0"/>
-    <mimic joint="gripper_joint" multiplier="-0.33" offset="0" />
+    <mimic joint="gripper_joint" multiplier="-0.33" offset="0"/>
   </joint>
-
   <joint name="ee_joint" type="fixed">
-    <origin xyz="0.126 0.0 0.0" rpy="0 0 0"/>
+    <origin rpy="0 0 0" xyz="0.126 0.0 0.0"/>
     <parent link="palm_link"/>
     <child link="ee_link"/>
   </joint>
-
 </robot>
 

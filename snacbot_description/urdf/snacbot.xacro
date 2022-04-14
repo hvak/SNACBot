@@ -1,298 +1,299 @@
 <?xml version="1.0" ?>
-<robot name="snacbot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+<robot name="snacbot"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-<xacro:include filename="$(find snacbot_description)/urdf/materials.xacro" />
-<xacro:include filename="$(find snacbot_description)/urdf/snacbot.trans" />
-<xacro:include filename="$(find snacbot_description)/urdf/snacbot.gazebo" />
-<xacro:arg name="use_nominal_extrinsics" default="false" />
-<xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
+  <xacro:include filename="$(find snacbot_description)/urdf/materials.xacro" />
+  <xacro:include filename="$(find snacbot_description)/urdf/snacbot.trans" />
+  <xacro:include filename="$(find snacbot_description)/urdf/snacbot.gazebo" />
+  <xacro:arg name="use_nominal_extrinsics" default="false" />
+  <xacro:include filename="$(find realsense2_description)/urdf/_d435i.urdf.xacro"/>
 
-<link name="world"/>
+  <link name="world"/>
 
-<link name="base_link">
-  <inertial>
-    <origin xyz="0.0023657954446381375 -6.614240985321828e-05 0.03556496392903804" rpy="0 0 0"/>
-    <mass value="1.5030270945970066"/>
-    <inertia ixx="0.002425" iyy="0.002489" izz="0.003322" ixy="1e-06" iyz="-1e-05" ixz="-4.8e-05"/>
-  </inertial>
-  <visual>
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0.0023657954446381375 -6.614240985321828e-05 0.03556496392903804" rpy="0 0 0"/>
+      <mass value="1.5030270945970066"/>
+      <inertia ixx="0.002425" iyy="0.002489" izz="0.003322" ixy="1e-06" iyz="-1e-05" ixz="-4.8e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.1025" rpy="0 0 ${pi/2}"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="shoulder_link">
+    <inertial>
+      <origin xyz="-3.5710799003101265e-16 -9.70255671027657e-16 0.021007556766470648" rpy="0 0 0"/>
+      <mass value="0.9933845675779478"/>
+      <inertia ixx="0.001482" iyy="0.000491" izz="0.001397" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="0.0 -0.0 -0.073675" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/shoulder_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="0.0 -0.0 -0.073675" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/shoulder_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="arm_link">
+    <inertial>
+      <origin xyz="0.006643024417772186 0.009009733316364827 0.15284041528327338" rpy="0 0 0"/>
+      <mass value="0.7694455801037552"/>
+      <inertia ixx="0.003903" iyy="0.003957" izz="0.00022" ixy="-1e-06" iyz="-0.0" ixz="-0.000266"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.0 0.009 -0.113675" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/arm_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.0 0.009 -0.113675" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/arm_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="arm_shadow_link">
+    <origin xyz="-0.0 0.009 -0.113675" rpy="0 0 0"/>
+  </link>
+
+  <link name="forearm_link">
+    <inertial>
+      <origin xyz="0.12530362498320322 0.02051079804018362 0.007019037615682622" rpy="0 0 0"/>
+      <mass value="0.6930776096733422"/>
+      <inertia ixx="0.000161" iyy="0.002362" izz="0.00239" ixy="-2e-06" iyz="-0.0" ixz="-0.000204"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.027 0.020075 -0.317875" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/forearm_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.027 0.020075 -0.317875" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/forearm_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="hand_link">
+    <inertial>
+      <origin xyz="0.04152167158553119 0.02011849033469139 -0.010784557589962995" rpy="0 0 0"/>
+      <mass value="0.4498637120159831"/>
+      <inertia ixx="0.000148" iyy="0.000224" izz="0.000198" ixy="1e-06" iyz="-0.0" ixz="2.7e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.2078 0.01965 -0.330375" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/hand_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.2078 0.01965 -0.330375" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/hand_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+
+
+  <link name="palm_link">
+    <inertial>
+      <origin xyz="0.03514107719512616 0.00028468032824946964 0.0011739025280478876" rpy="0 0 0"/>
+      <mass value="0.5485700850055245"/>
+      <inertia ixx="0.00015" iyy="0.000191" izz="0.0002" ixy="-0.0" iyz="-0.0" ixz="-1.2e-05"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.27311 -0.00045 -0.330325" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/palm_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.27311 -0.00045 -0.330325" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/palm_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <xacro:sensor_d435i parent="palm_link" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
+    <origin xyz="0.04 0 0.035" rpy="0 0 0"/>
+  </xacro:sensor_d435i>
+
+  <link name="gripper_driving_link">
+    <inertial>
+      <origin xyz="-4.267483755260315e-09 7.6050195998832865e-06 0.002017482694919248" rpy="0 0 0"/>
+      <mass value="0.009329279902749366"/>
+      <inertia ixx="0.0" iyy="0.0" izz="1e-06" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.32015 -0.000756 -0.309525" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/gripper_driving_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="blue"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.32015 -0.000756 -0.309525" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/gripper_driving_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="finger1_link">
+    <inertial>
+      <origin xyz="0.04341596099355033 0.00717258179909807 0.009580165880901437" rpy="0 0 0"/>
+      <mass value="0.14441482713674805"/>
+      <inertia ixx="2e-05" iyy="0.000111" izz="0.000116" ixy="-2.9e-05" iyz="-1e-06" ixz="-2e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.30115 0.023244 -0.320325" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/finger1_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.30115 0.023244 -0.320325" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/finger1_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="finger2_link">
+    <inertial>
+      <origin xyz="0.043415960993547276 -0.007172063661821274 0.009580165880900049" rpy="0 0 0"/>
+      <mass value="0.14441482713674192"/>
+      <inertia ixx="2e-05" iyy="0.000111" izz="0.000116" ixy="2.9e-05" iyz="1e-06" ixz="-2e-06"/>
+    </inertial>
+    <visual>
+      <origin xyz="-0.30115 -0.024756 -0.320325" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/finger2_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+      <material name="orange"/>
+    </visual>
+    <collision>
+      <origin xyz="-0.30115 -0.024756 -0.320325" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://snacbot_description/meshes/finger2_link_1.stl" scale="0.001 0.001 0.001"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <link name="ee_link">
     <origin xyz="0 0 0" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision>
-    <origin xyz="0 0 0" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
+  </link>
 
-<link name="shoulder_link">
-  <inertial>
-    <origin xyz="-3.5710799003101265e-16 -9.70255671027657e-16 0.021007556766470648" rpy="0 0 0"/>
-    <mass value="0.9933845675779478"/>
-    <inertia ixx="0.001482" iyy="0.000491" izz="0.001397" ixy="0.0" iyz="-0.0" ixz="-0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="0.0 -0.0 -0.073675" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/shoulder_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision>
-    <origin xyz="0.0 -0.0 -0.073675" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/shoulder_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
+  <joint name="base_joint" type="fixed">
+    <parent link="world" />
+    <child link="base_link" />
+  </joint>
 
-<link name="arm_link">
-  <inertial>
-    <origin xyz="0.006643024417772186 0.009009733316364827 0.15284041528327338" rpy="0 0 0"/>
-    <mass value="0.7694455801037552"/>
-    <inertia ixx="0.003903" iyy="0.003957" izz="0.00022" ixy="-1e-06" iyz="-0.0" ixz="-0.000266"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.0 0.009 -0.113675" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/arm_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision>
-    <origin xyz="-0.0 0.009 -0.113675" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/arm_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
+  <joint name="waist_joint" type="revolute">
+    <origin xyz="0.0 0.0 0.1055" rpy="0 0 0"/>
+    <parent link="base_link"/>
+    <child link="shoulder_link"/>
+    <axis xyz="0.0 0.0 1.0"/>
+    <limit lower="-3.14" upper="3.14" effort="300" velocity="4.01" />
+  </joint>
 
-<link name="arm_shadow_link">
-    <origin xyz="-0.0 0.009 -0.113675" rpy="0 0 0"/>
-</link>
+  <joint name="shoulder_joint" type="revolute">
+    <origin xyz="0.0 -0.009 0.04" rpy="0 0 0"/>
+    <parent link="shoulder_link"/>
+    <child link="arm_link"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <limit lower="-1.85" upper="1.85" effort="300" velocity="4.01" />
+  </joint>
 
-<link name="forearm_link">
-  <inertial>
-    <origin xyz="0.12530362498320322 0.02051079804018362 0.007019037615682622" rpy="0 0 0"/>
-    <mass value="0.6930776096733422"/>
-    <inertia ixx="0.000161" iyy="0.002362" izz="0.00239" ixy="-2e-06" iyz="-0.0" ixz="-0.000204"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.027 0.020075 -0.317875" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/forearm_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision>
-    <origin xyz="-0.027 0.020075 -0.317875" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/forearm_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
+  <joint name="shoulder_shadow_joint" type="continuous">
+    <origin xyz="0.0 -0.009 0.04" rpy="0 0 0"/>
+    <parent link="shoulder_link"/>
+    <child link="arm_shadow_link"/>
+    <axis xyz="0.0 1.0 0.0"/>
+    <mimic joint="shoulder_joint" multiplier="-1" offset="0" />
+  </joint>
 
-<link name="hand_link">
-  <inertial>
-    <origin xyz="0.04152167158553119 0.02011849033469139 -0.010784557589962995" rpy="0 0 0"/>
-    <mass value="0.4498637120159831"/>
-    <inertia ixx="0.000148" iyy="0.000224" izz="0.000198" ixy="1e-06" iyz="-0.0" ixz="2.7e-05"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.2078 0.01965 -0.330375" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/hand_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision>
-    <origin xyz="-0.2078 0.01965 -0.330375" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/hand_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
+  <joint name="elbow_joint" type="revolute">
+    <origin xyz="0.027 -0.011075 0.2042" rpy="0 0 0"/>
+    <parent link="arm_link"/>
+    <child link="forearm_link"/>
+    <axis xyz="0.0 -1.0 0.0"/>
+    <limit lower="-1.5" upper="1.6" effort="300" velocity="4.01" />
+  </joint>
 
+  <joint name="wrist_joint" type="revolute">
+    <origin xyz="0.1808 0.000425 0.0125" rpy="0 0 0"/>
+    <parent link="forearm_link"/>
+    <child link="hand_link"/>
+    <axis xyz="-0.0 -1.0 0.0"/>
+    <limit lower="-1.6" upper="1.85" effort="300" velocity="4.01" />
+  </joint>
 
+  <joint name="palm_joint" type="revolute">
+    <origin xyz="0.06531 0.0201 -5e-05" rpy="0 0 0"/>
+    <parent link="hand_link"/>
+    <child link="palm_link"/>
+    <axis xyz="1.0 0.0 0.0"/>
+    <limit lower="-1.6" upper="1.6" effort="300" velocity="4.01" />
+  </joint>
 
-<link name="palm_link">
-  <inertial>
-    <origin xyz="0.03514107719512616 0.00028468032824946964 0.0011739025280478876" rpy="0 0 0"/>
-    <mass value="0.5485700850055245"/>
-    <inertia ixx="0.00015" iyy="0.000191" izz="0.0002" ixy="-0.0" iyz="-0.0" ixz="-1.2e-05"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.27311 -0.00045 -0.330325" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/palm_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision>
-    <origin xyz="-0.27311 -0.00045 -0.330325" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/palm_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
+  <joint name="gripper_joint" type="revolute">
+    <origin xyz="0.04704 0.000306 -0.0208" rpy="0 0 0"/>
+    <parent link="palm_link"/>
+    <child link="gripper_driving_link"/>
+    <axis xyz="-0.0 -0.0 1.0"/>
+    <limit lower="0.26" upper="2.6" effort="300" velocity="4.01" />
+  </joint>
 
-<xacro:sensor_d435i parent="palm_link" use_nominal_extrinsics="$(arg use_nominal_extrinsics)">
-  <origin xyz="0.04 0 0.035" rpy="0 0 0"/>
-</xacro:sensor_d435i>
+  <joint name="finger1_joint" type="continuous">
+    <origin xyz="0.02804 -0.023694 -0.01" rpy="0 0 0"/>
+    <parent link="palm_link"/>
+    <child link="finger1_link"/>
+    <axis xyz="0.0 0.0 -1.0"/>
+    <mimic joint="gripper_joint" multiplier="0.33" offset="0" />
+  </joint>
 
-<link name="gripper_driving_link">
-  <inertial>
-    <origin xyz="-4.267483755260315e-09 7.6050195998832865e-06 0.002017482694919248" rpy="0 0 0"/>
-    <mass value="0.009329279902749366"/>
-    <inertia ixx="0.0" iyy="0.0" izz="1e-06" ixy="-0.0" iyz="-0.0" ixz="-0.0"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.32015 -0.000756 -0.309525" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/gripper_driving_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision>
-    <origin xyz="-0.32015 -0.000756 -0.309525" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/gripper_driving_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
+  <joint name="finger2_joint" type="continuous">
+    <origin xyz="0.02804 0.024306 -0.01" rpy="0 0 0"/>
+    <parent link="palm_link"/>
+    <child link="finger2_link"/>
+    <axis xyz="0.0 0.0 -1.0"/>
+    <mimic joint="gripper_joint" multiplier="-0.33" offset="0" />
+  </joint>
 
-<link name="finger1_link">
-  <inertial>
-    <origin xyz="0.04341596099355033 0.00717258179909807 0.009580165880901437" rpy="0 0 0"/>
-    <mass value="0.14441482713674805"/>
-    <inertia ixx="2e-05" iyy="0.000111" izz="0.000116" ixy="-2.9e-05" iyz="-1e-06" ixz="-2e-06"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.30115 0.023244 -0.320325" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/finger1_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision>
-    <origin xyz="-0.30115 0.023244 -0.320325" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/finger1_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="finger2_link">
-  <inertial>
-    <origin xyz="0.043415960993547276 -0.007172063661821274 0.009580165880900049" rpy="0 0 0"/>
-    <mass value="0.14441482713674192"/>
-    <inertia ixx="2e-05" iyy="0.000111" izz="0.000116" ixy="2.9e-05" iyz="1e-06" ixz="-2e-06"/>
-  </inertial>
-  <visual>
-    <origin xyz="-0.30115 -0.024756 -0.320325" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/finger2_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-    <material name="silver"/>
-  </visual>
-  <collision>
-    <origin xyz="-0.30115 -0.024756 -0.320325" rpy="0 0 0"/>
-    <geometry>
-      <mesh filename="package://snacbot_description/meshes/finger2_link_1.stl" scale="0.001 0.001 0.001"/>
-    </geometry>
-  </collision>
-</link>
-
-<link name="ee_link">
-  <origin xyz="0 0 0" rpy="0 0 0"/>
-</link>
-
-<joint name="base_joint" type="fixed">
-  <parent link="world" />
-  <child link="base_link" />
-</joint>
-
-<joint name="waist_joint" type="revolute">
-  <origin xyz="0.0 0.0 0.073675" rpy="0 0 0"/>
-  <parent link="base_link"/>
-  <child link="shoulder_link"/>
-  <axis xyz="0.0 0.0 1.0"/>
-  <limit lower="-3.14" upper="3.14" effort="300" velocity="4.01" />
-</joint>
-
-<joint name="shoulder_joint" type="revolute">
-  <origin xyz="0.0 -0.009 0.04" rpy="0 0 0"/>
-  <parent link="shoulder_link"/>
-  <child link="arm_link"/>
-  <axis xyz="0.0 1.0 0.0"/>
-  <limit lower="-1.85" upper="1.85" effort="300" velocity="4.01" />
-</joint>
-
-<joint name="shoulder_shadow_joint" type="continuous">
-  <origin xyz="0.0 -0.009 0.04" rpy="0 0 0"/>
-  <parent link="shoulder_link"/>
-  <child link="arm_shadow_link"/>
-  <axis xyz="0.0 1.0 0.0"/>
-  <mimic joint="shoulder_joint" multiplier="-1" offset="0" />
-</joint>
-
-<joint name="elbow_joint" type="revolute">
-  <origin xyz="0.027 -0.011075 0.2042" rpy="0 0 0"/>
-  <parent link="arm_link"/>
-  <child link="forearm_link"/>
-  <axis xyz="0.0 -1.0 0.0"/>
-  <limit lower="-1.5" upper="1.6" effort="300" velocity="4.01" />
-</joint>
-
-<joint name="wrist_joint" type="revolute">
-  <origin xyz="0.1808 0.000425 0.0125" rpy="0 0 0"/>
-  <parent link="forearm_link"/>
-  <child link="hand_link"/>
-  <axis xyz="-0.0 -1.0 0.0"/>
-  <limit lower="-1.6" upper="1.85" effort="300" velocity="4.01" />
-</joint>
-
-<joint name="palm_joint" type="revolute">
-  <origin xyz="0.06531 0.0201 -5e-05" rpy="0 0 0"/>
-  <parent link="hand_link"/>
-  <child link="palm_link"/>
-  <axis xyz="1.0 0.0 0.0"/>
-  <limit lower="-1.6" upper="1.6" effort="300" velocity="4.01" />
-</joint>
-
-<joint name="gripper_joint" type="revolute">
-  <origin xyz="0.04704 0.000306 -0.0208" rpy="0 0 0"/>
-  <parent link="palm_link"/>
-  <child link="gripper_driving_link"/>
-  <axis xyz="-0.0 -0.0 1.0"/>
-  <limit lower="0.26" upper="2.6" effort="300" velocity="4.01" />
-</joint>
-
-<joint name="finger1_joint" type="continuous">
-  <origin xyz="0.02804 -0.023694 -0.01" rpy="0 0 0"/>
-  <parent link="palm_link"/>
-  <child link="finger1_link"/>
-  <axis xyz="0.0 0.0 -1.0"/>
-  <mimic joint="gripper_joint" multiplier="0.33" offset="0" />
-</joint>
-
-<joint name="finger2_joint" type="continuous">
-  <origin xyz="0.02804 0.024306 -0.01" rpy="0 0 0"/>
-  <parent link="palm_link"/>
-  <child link="finger2_link"/>
-  <axis xyz="0.0 0.0 -1.0"/>
-  <mimic joint="gripper_joint" multiplier="-0.33" offset="0" />
-</joint>
-
-<joint name="ee_joint" type="fixed">
-  <origin xyz="0.126 0.0 0.0" rpy="0 0 0"/>
-  <parent link="palm_link"/>
-  <child link="ee_link"/>
-</joint>
+  <joint name="ee_joint" type="fixed">
+    <origin xyz="0.126 0.0 0.0" rpy="0 0 0"/>
+    <parent link="palm_link"/>
+    <child link="ee_link"/>
+  </joint>
 
 </robot>

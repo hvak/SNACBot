@@ -4,8 +4,11 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <robot name="snacbot">
-  <material name="silver">
-    <color rgba="0.700 0.700 0.700 1.000"/>
+  <material name="orange">
+    <color rgba="1.0 0.49411764705882355 0.0 1.000"/>
+  </material>
+  <material name="blue">
+    <color rgba="0.16470588235294117 0.3215686274509804 0.7450980392156863 1.000"/>
   </material>
   <transmission name="waist_joint_tran">
     <type>transmission_interface/SimpleTransmission</type>
@@ -159,11 +162,11 @@
       <inertia ixx="0.002425" ixy="1e-06" ixz="-4.8e-05" iyy="0.002489" iyz="-1e-05" izz="0.003322"/>
     </inertial>
     <visual>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <origin rpy="0 0 1.5707963267948966" xyz="0 0 0.1025"/>
       <geometry>
         <mesh filename="package://snacbot_description/meshes/base_link.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -183,7 +186,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/shoulder_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0.0 -0.0 -0.073675"/>
@@ -203,7 +206,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/arm_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.0 0.009 -0.113675"/>
@@ -226,7 +229,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/forearm_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.027 0.020075 -0.317875"/>
@@ -246,7 +249,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/hand_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.2078 0.01965 -0.330375"/>
@@ -266,7 +269,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/palm_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.27311 -0.00045 -0.330325"/>
@@ -319,7 +322,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/gripper_driving_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="blue"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.32015 -0.000756 -0.309525"/>
@@ -339,7 +342,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/finger1_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.30115 0.023244 -0.320325"/>
@@ -359,7 +362,7 @@
       <geometry>
         <mesh filename="package://snacbot_description/meshes/finger2_link_1.stl" scale="0.001 0.001 0.001"/>
       </geometry>
-      <material name="silver"/>
+      <material name="orange"/>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="-0.30115 -0.024756 -0.320325"/>
@@ -376,7 +379,7 @@
     <child link="base_link"/>
   </joint>
   <joint name="waist_joint" type="revolute">
-    <origin rpy="0 0 0" xyz="0.0 0.0 0.073675"/>
+    <origin rpy="0 0 0" xyz="0.0 0.0 0.1055"/>
     <parent link="base_link"/>
     <child link="shoulder_link"/>
     <axis xyz="0.0 0.0 1.0"/>
