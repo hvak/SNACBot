@@ -1,6 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<library path="lib/libsnacbot_snacbot_arm_moveit_ikfast_plugin">
-  <class name="snacbot_snacbot_arm/IKFastKinematicsPlugin" type="snacbot_snacbot_arm::IKFastKinematicsPlugin" base_class_type="kinematics::KinematicsBase">
-    <description>IKFast61 plugin for closed-form kinematics of snacbot snacbot_arm</description>
-  </class>
-</library>

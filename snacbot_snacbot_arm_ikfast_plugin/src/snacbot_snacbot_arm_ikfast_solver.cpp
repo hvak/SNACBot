@@ -12,7 +12,7 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
 ///
-/// ikfast version 0x10000049 generated on 2022-04-10 01:12:24.867467
+/// ikfast version 0x10000049 generated on 2022-04-14 18:15:21.035290
 /// To compile with gcc:
 ///     gcc -lstdc++ ik.cpp
 /// To compile without any main function as a shared object (might need -llapack):
@@ -329,7 +329,7 @@ eetrans[0]=(((x5*((((x14*x23))+((x14*x25))))))+(((-0.00045)*x7))+((x6*((((x10*x2
 IkReal x27=((1.0)*x22);
 eetrans[1]=(((x21*x7))+((x5*((((x16*x25))+((x16*x23))))))+((x5*(((((-1.0)*x20*x27))+((x20*x26))))))+(((0.00045)*x0))+((x6*(((((-1.0)*x16*x26))+((x16*x22))))))+((x6*((((x20*x23))+((x20*x25))))))+((x12*x26))+((x15*x25))+((x15*x23))+(((0.2042)*x2*x7))+(((-1.0)*x12*x27)));
 IkReal x28=((1.0)*x18);
-eetrans[2]=((0.113675)+(((-0.027)*x2))+(((0.1808)*x22))+((x5*(((((-1.0)*x2*x28))+(((5.0e-5)*x22))))))+(((0.0125)*x25))+(((0.0125)*x23))+((x6*(((((0.19131)*x22))+(((-0.19131)*x26))))))+((x6*(((((-5.0e-5)*x25))+(((-1.0)*x28*x3))))))+(((-0.1808)*x26))+((x5*(((((0.19131)*x25))+(((0.19131)*x23))))))+(((0.2042)*x3)));
+eetrans[2]=((0.1455)+(((-0.027)*x2))+(((0.1808)*x22))+((x5*(((((-1.0)*x2*x28))+(((5.0e-5)*x22))))))+(((0.0125)*x25))+(((0.0125)*x23))+((x6*(((((0.19131)*x22))+(((-0.19131)*x26))))))+((x6*(((((-5.0e-5)*x25))+(((-1.0)*x28*x3))))))+(((-0.1808)*x26))+((x5*(((((0.19131)*x25))+(((0.19131)*x23))))))+(((0.2042)*x3)));
 eerot[0]=(((x7*x9))+(((-1.0)*x8*((((x17*(((((-1.0)*x0*x1*x11))+((x19*x22))))))+((x13*((((x0*x23))+((x24*x4)))))))))));
 IkReal x29=((1.0)*x7);
 eerot[1]=((((-1.0)*x19*x9))+(((-1.0)*x8*((((x13*((((x23*x7))+((x25*x7))))))+((x17*((((x22*x29))+(((-1.0)*x1*x11*x29)))))))))));
@@ -367,7 +367,7 @@ new_px=px;
 new_r01=r01;
 new_py=py;
 new_r02=r02;
-new_pz=((-0.113675)+pz);
+new_pz=((-0.1455)+pz);
 r00 = new_r00; r01 = new_r01; r02 = new_r02; px = new_px; py = new_py; pz = new_pz;
 
 pp=((px*px)+(py*py)+(pz*pz));
@@ -1761,7 +1761,7 @@ IKSolver solver;
 return solver.ComputeIk(eetrans,eerot,pfree,solutions);
 }
 
-IKFAST_API const char* GetKinematicsHash() { return "b3fd78ba725fc8c1f751f7abf0aab51c"; }
+IKFAST_API const char* GetKinematicsHash() { return "84648385246d7f62954e6a9ec105db59"; }
 
 IKFAST_API const char* GetIkFastVersion() { return "0x10000049"; }
 
