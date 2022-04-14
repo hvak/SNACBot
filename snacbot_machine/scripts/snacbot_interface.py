@@ -1,5 +1,4 @@
 import sys
-import copy
 
 from sympy import Quaternion
 
@@ -23,6 +22,8 @@ except:  # For Python 2 compatibility
 from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 
+def clamp(num, min_value, max_value):
+   return max(min(num, max_value), min_value)
 
 def all_close(goal, actual, tolerance):
     """
@@ -145,6 +146,20 @@ class SNACBotMoveitInterface(object):
         display_trajectory.trajectory.append(plan[1])
         # Publish
         self.display_trajectory_publisher.publish(display_trajectory)
+
+    #open gripper to a dist between 0 and 0.125m
+    def open_gripper_dist(self, dist):
+        rad = 14.24189 * dist + 0.37925
+        rad = clamp(rad, 0.279, 2.059)
+        
+        joint_goal = self.hand_group.get_current_joint_values()
+        joint_goal[0] = 0.33 * rad
+        joint_goal[1] = -0.33 * rad
+        joint_goal[2] = rad
+        success = self.hand_group.go(joint_goal, wait=True)
+        self.hand_group.stop()
+        self.hand_group.clear_pose_targets()
+        return success
 
     def open_gripper(self):
         if self.debug: print("Opening gripper")
