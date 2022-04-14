@@ -169,7 +169,7 @@ if __name__ == "__main__":
     print("============ Generating plan")
     x = 0.1
     y = 0.1
-    z = 0.01
+    z = 0.0
     roll = 0
     pitch = 1.57
     yaw = 0

@@ -1,0 +1,4 @@
+<launch>
+  <include file="$(find snacbot_controller)/launch/dynamixel_controller.launch"/>
+  <include file="$(find snacbot_moveit)/launch/snacbot_real.launch"/>
+</launch>
