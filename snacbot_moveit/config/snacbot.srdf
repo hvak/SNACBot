@@ -38,6 +38,13 @@
         <joint name="wrist_joint" value="-1.57"/>
         <joint name="palm_joint" value="0"/>
     </group_state>
+    <group_state name="sleep" group="snacbot_arm">
+        <joint name="elbow_joint" value="-1.44"/>
+        <joint name="shoulder_joint" value="-1.84"/>
+        <joint name="waist_joint" value="0"/>
+        <joint name="wrist_joint" value="-0.3973"/>
+        <joint name="palm_joint" value="0"/>
+    </group_state>
     <group_state name="open" group="snacbot_hand">
         <joint name="gripper_joint" value="2.6"/>
         <joint name="finger1_joint" value="0.858"/>
