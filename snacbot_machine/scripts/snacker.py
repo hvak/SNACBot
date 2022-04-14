@@ -1,4 +1,3 @@
-from sre_constants import SUCCESS
 from snacbot_interface import SNACBotMoveitInterface
 from geometry_msgs.msg import Pose
 from enum import Enum
