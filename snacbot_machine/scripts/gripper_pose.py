@@ -2,6 +2,15 @@ import numpy as np
 import cv2
 
 class gripper_pose
+    #RETURNS:   The distance of a point (x,y,z) from a plane (Ax+By+C=z)
+    #REQUIRES:  x, y, and z are values of a coordinate (x,y,z) and A,B,C are the
+    #           coefficients of a plane Ax+By+C=z
+    def dist_to_plane(self,x,y,z,A,B,C):
+        return abs(-A*x-B*y+z-C)/np.sqrt(pow(A,2)+pow(B,2)+1)
+
+    #RETURNS:   Distance of plane from camera at the center of object, pixel coordinate of object in frame, and angle orientation of object
+    #REQUIRES:  depth_map is a (HxWx1) array of int16 where H and W are the EXACT
+    #           DIMENSIONS of the RGB image as well, and bounding_box is not equal to None.
     def pose_estimate(self, bounding_box, depth):
         #Extract valuable info from the bounding box input
         x1=bounding_box[0]
@@ -9,8 +18,8 @@ class gripper_pose
         x2=bounding_box[2]
         y2=bounding_box[3]
         
-        #Convert the depth image into a gray array and crop it
-        depth_arr = cv2.cvtColor(np.asarray(depth)[y1:y2,x1:x2], cv2.COLOR_BGR2GRAY)
+        #Crop the array by the bounding box
+        depth_arr = depth_arr[y1:y2,x1:x2]
         
         #Find nonzero-valued coordinate pairs (x,y,depth_arr[y,x]) and generate a plane        
         shape = depth_arr.shape
@@ -50,11 +59,11 @@ class gripper_pose
         
         #Create the object mask
         bool_array = np.full((x_lim, y_lim), False)
-        bool_thresh = 10
+        height_thresh = 10
         for x in range(x_lim):
             for y in range(y_lim):
-                dist = dist_to_plane(x,y,depth_arr[x,y],a,b,c)
-                if depth_arr[x,y] > thresh and dist > bool_thresh:
+                dist = self.dist_to_plane(x,y,depth_arr[x,y],a,b,c)
+                if depth_arr[x,y] > thresh and dist > height_thresh:
                     bool_array[x,y] = True
                     
         #Get coordinates of nonzero elements in bool array
@@ -73,7 +82,7 @@ class gripper_pose
         cov = np.cov(coords)
         evals, evecs = np.linalg.eig(cov)
         sort_indices = np.argsort(evals)[::-1]
-        x_v1, y_v1 = evecs[:, sort_indices[0]]
+        y_v1, x_v1 = evecs[:, sort_indices[0]]
         
         #Return: depth of plane at (c_x,x_y), coord of object center relative to image top right corner , image orientation
         depth_of_plane_at_obj = a*c_x+b*c_y+c
