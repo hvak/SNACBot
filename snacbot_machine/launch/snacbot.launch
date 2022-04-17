@@ -1,4 +1,9 @@
 <launch>
-  <include file="$(find snacbot_controller)/launch/dynamixel_controller.launch"/>
+  <node pkg="face_detection" name="callFaceDetection" type="callFaceDetection.py" output="screen"/>
+  <node pkg="snacknet" name="callSnackNet" type="callSnackNet.py" output="screen"/>
+  <!--<include file="$(find snacbot_controller)/launch/dynamixel_controller.launch"/>-->
   <include file="$(find snacbot_moveit)/launch/snacbot_real.launch"/>
+  <include file="$(find realsense2_camera)/launch/rs_camera.launch">
+    <arg name="align_depth" value="true"/>
+  </include>
 </launch>

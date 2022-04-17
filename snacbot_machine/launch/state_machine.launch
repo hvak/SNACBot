@@ -1,0 +1,3 @@
+<launch>
+  <node pkg="snacbot_machine" name="snacker" type="snacker.py" output="screen"/>
+</launch>

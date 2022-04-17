@@ -2,6 +2,7 @@ import rospy
 from sensor_msgs.msg import Image 
 import cv2
 from cv_bridge import CvBridge, CvBridgeError
+import numpy as np
 
 bridge = CvBridge()
 
@@ -18,8 +19,10 @@ def rgb_callback(msg):
 def depth_callback(msg):
     global depth_count
     print("Received a depth image!")
-    cv2_img = bridge.imgmsg_to_cv2(msg, msg.encoding)
-    cv2.imwrite('img/depth' + str(depth_count) + ".jpeg", cv2_img)
+    # cv2_img = bridge.imgmsg_to_cv2(msg, msg.encoding)
+    # cv2.imwrite('img/depth' + str(depth_count) + ".jpeg", cv2_img)
+    data = np.asarray(msg.data)
+    np.save('img/depth' + str(depth_count) + ".np", data)
     depth_count += 1
 
 
