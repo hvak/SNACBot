@@ -71,6 +71,13 @@ class SNACBotMoveitInterface(object):
         plan = self.arm_group.plan()
         self.arm_group.clear_pose_targets()
         return plan[0]
+    
+    def goal_position_valid(self, pose):
+        xyz = [pose.position.x, pose.position.y, pose.position.z]
+        self.arm_group.set_position_target(xyz)
+        plan = self.arm_group.plan()
+        self.arm_group.clear_pose_targets()
+        return plan[0]
 
     #goes to predfined group states (as defined in srdf)
     def go_to_group_state(self, group_name):
@@ -121,13 +128,17 @@ class SNACBotMoveitInterface(object):
         self.display_trajectory_publisher.publish(display_trajectory)
 
     def rotate_waist(self, ang):
-        ang = clamp(ang, -3.14, 3.14)
+        #ang = clamp(ang, -3.14, 3.14)
         joints = self.arm_group.get_current_joint_values()
+        print(joints)
         joints[0] = ang
         success = self.arm_group.go(joints, wait=True)
         self.arm_group.stop()
         self.arm_group.clear_pose_targets()
         return success
+
+    def get_waist_angle(self):
+        return self.arm_group.get_current_joint_values()[0]
 
     #open gripper to a dist between 0 and 0.125m
     def open_gripper_dist(self, dist):
