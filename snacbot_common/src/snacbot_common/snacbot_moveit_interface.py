@@ -9,7 +9,6 @@ import tf
 from snacbot_common.common import clamp
 
 
-from std_msgs.msg import String
 from moveit_commander.conversions import pose_to_list
 
 class SNACBotMoveitInterface(object):
@@ -122,6 +121,7 @@ class SNACBotMoveitInterface(object):
         self.display_trajectory_publisher.publish(display_trajectory)
 
     def rotate_waist(self, ang):
+        ang = clamp(ang, -3.14, 3.14)
         joints = self.arm_group.get_current_joint_values()
         joints[0] = ang
         success = self.arm_group.go(joints, wait=True)
