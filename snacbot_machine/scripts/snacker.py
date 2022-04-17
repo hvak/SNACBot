@@ -29,6 +29,20 @@ class State(Enum):
     COMPLETE = 8
     SLEEP_STATE = 9
 
+    SEARCH_HUMAN = 10
+
+class detection_buffer:
+    def __init__(self, num_states = 4):
+        self.state = 0
+        self.max_state = num_states - 1
+        self.thresh = num_states/2 - 1
+
+    def reset(self):
+        self.state = 0
+        
+    def tick(self, detection):
+        self.state = min(self.max_state, self.state + 1) if detection else max(0,self.state - 1)
+        return self.state > self.thresh
 
 
 class Snacker:
@@ -113,6 +127,10 @@ class Snacker:
         if not state: return StateResult.FAIL
 
         return StateResult.SUCCESS
+
+    #Look around for a human by panning
+    def scan_for_human_state(self):
+        
 
 
     #TODO: other states
