@@ -58,12 +58,36 @@ class Snacker:
         self.snacbot.go_to_group_state("sleep")
         self.snacbot.open_gripper()
         self.snacbot.close_gripper()
-        return StateResult.SUCCESS
+        return State.SEARCH_HUMAN
+
+        
+
+    #Look around for a human by panning one time.
+    #Needs to switch directions. We should only break this state when we have found a human.
+    #RETURNS State.SEARCH_FOOD ALWAYS.
+    def scan_for_human_state(self):
+        human_found = False
+        while not human_found:
+            #Look for human with mouth open. If human exists, do:
+            if ???
+                human_found = True
+                self.last_human_position = ???
+        return State.SEARCH_FOOD:
 
     def get_grasp_pose(self):
         return self.snacbot.construct_pose(0.2, -0.2, 0.02, 0, 1.57, 0)
 
 
+    #Look for food by going to food search pose.
+    #
+    #IF there is no food found, do:
+    #   1. Go to sleep pose
+    #   2. SLEEP: Set a timer for some amount of time to wait.
+    #   3. Return State.SEARCH_FOOD
+    #
+    #IF THERE IS FOOD, DO:
+    #   1. self.food_pose = food_pose
+    #   2. Return State.GRASP
     def search_food_state(self):
         #go to food state
         state = self.snacbot.go_to_group_state("food")
@@ -91,6 +115,7 @@ class Snacker:
 
         return StateResult.SUCCESS
 
+    #TODO: PHASE THIS OUT
     def pre_grasp_state(self):
         #calc pre-grasp
         self.pre_grasp_pose = Pose()
@@ -113,27 +138,24 @@ class Snacker:
 
         return StateResult.SUCCESS
 
+    #GO TO PREGRASP POSE, THEN GO TO GRAB FOOD. FOOD WILL BE LOCATED AT self.food_pose
+    #RETURN TO self.last_human_position
+    #Unconditionally return State.SEARCH_FACE
     def grasp_state(self):
         state = self.snacbot.go_to_pose_goal(self.grasp_pose)
         if not state: return StateResult.FAIL
         state = self.snacbot.close_gripper()
         if not state: return StateResult.FAIL
 
-        return StateResult.SUCCESS
+        return StateResult.SUCCESS        
 
 
-    def post_grasp_state(self):
-        state = self.snacbot.go_to_pose_goal(self.pre_grasp_pose)
-        if not state: return StateResult.FAIL
-
-        return StateResult.SUCCESS
-
-    #Look around for a human by panning
-    def scan_for_human_state(self):
-        
-
-
-    #TODO: other states
+    #IN THIS STATE, SHOULD WE PAN AROUND?
+    #Wait for a human to be opening their mouth for some specified amount of time
+    #May be able to do a smaller FSM inside of here to search for humans within range like before
+    #Use the detection buffer to make it resistant to errors kinda
+    #self.feed_pose is the last known position of the human, update it just before we return the next state
+    #Unconditionally returns State.FEED
     def search_mouth_state(self):
         ret = self.snacbot.go_to_group_state("sleep")
         if not ret: return StateResult.FAIL
@@ -151,6 +173,7 @@ class Snacker:
         return StateResult.SUCCESS
         #call service
 
+    #TODO: MERGE WITH feed_state()
     def pre_feed_state(self):
         
         self.pre_feed_pose = Pose()
@@ -170,7 +193,10 @@ class Snacker:
         #open gripper
         return StateResult.SUCCESS
 
-
+    #Feed the human by going to self.feed_pose
+    #Go to sleep pose
+    #Sleep for some amount of time using a timer
+    #return State.SCAN_HUMAN
     def feed_state(self):
         state = self.snacbot.go_to_position_goal(self.feed_pose)
         if not state: return StateResult.FAIL
@@ -179,7 +205,7 @@ class Snacker:
 
         return StateResult.SUCCESS
 
-    def sleep_state(self):
+    def go_to_sleep_pose(self):
         self.snacbot.close_gripper()
         self.snacbot.go_to_group_state("sleep")
 
@@ -195,79 +221,27 @@ class Snacker:
 
             #INITIAL STATE
             if current_state == State.INITIAL_STATE:
-                ret = self.initial_state()
-                #next states
-                if ret == StateResult.SUCCESS:
-                    next_state = State.SEARCH_FOOD
-                elif ret == StateResult.IN_PROGRESS:
-                    next_state = State.INITIAL_STATE
+                current_state = self.initial_state()
+
+            #SCAN FOR HUMAN STATE
+            elif current_state == State.SEARCH_HUMAN:
+                current_state = self.scan_for_human_state()
 
             #SEARCH FOOD STATE
-            if current_state == State.SEARCH_FOOD:
-                ret = self.search_food_state()
-                #next states
-                if ret == StateResult.SUCCESS:
-                    next_state = State.PRE_GRASP
-                elif ret == StateResult.IN_PROGRESS:
-                    next_state = State.SEARCH_FOOD
-
-            #PRE GRASP STATE
-            elif current_state == State.PRE_GRASP:
-                ret = self.pre_grasp_state()
-                #next states
-                if ret == StateResult.SUCCESS:
-                    next_state = State.GRASP
-                elif ret == StateResult.IN_PROGRESS:
-                    next_state = State.PRE_GRASP
-                else:
-                    next_state = State.SLEEP_STATE
+            elif current_state == State.SEARCH_FOOD:
+                current_state = self.search_food_state()
             
             #GRASP STATE
             elif current_state == State.GRASP:
-                ret = self.grasp_state()
-                #next states
-                if ret == StateResult.SUCCESS:
-                    next_state = State.POST_GRASP
-                elif ret == StateResult.IN_PROGRESS:
-                    next_state = State.GRASP
-            
-            #POST GRASP STATE
-            elif current_state == State.POST_GRASP:
-                ret = self.post_grasp_state()
-                #next states
-                if ret == StateResult.SUCCESS:
-                    next_state = State.SEARCH_FACE
-                elif ret == StateResult.IN_PROGRESS:
-                    next_state = State.POST_GRASP
+                current_state = self.grasp_state()
 
             #SEARCH FACE STATE
             elif current_state == State.SEARCH_FACE:
-                ret = self.search_mouth_state()
-                #next states
-                if ret == StateResult.SUCCESS:
-                    next_state = State.FEED
-                elif ret == StateResult.IN_PROGRESS:
-                    next_state = State.SEARCH_FACE
-            
-            #POST GRASP STATE
-            elif current_state == State.PRE_FEED:
-                ret = self.pre_feed_state()
-                #next states
-                if ret == StateResult.SUCCESS:
-                    next_state = State.FEED
-                elif ret == StateResult.IN_PROGRESS:
-                    next_state = State.PRE_FEED
+                current_state = self.search_mouth_state()
 
             #POST GRASP STATE
             elif current_state == State.FEED:
-                ret = self.feed_state()
-                #next states
-                if ret == StateResult.SUCCESS:
-                    next_state = State.INITIAL_STATE
-                elif ret == StateResult.IN_PROGRESS:
-                    next_state = State.FEED
-                else:
-                    next_state = State.SEARCH_FACE
+                current_state = self.feed_state()
             
 
             #TODO: add more states
