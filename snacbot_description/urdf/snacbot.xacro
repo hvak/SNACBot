@@ -263,7 +263,7 @@
     <parent link="hand_link"/>
     <child link="palm_link"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit lower="-1.6" upper="1.6" effort="300" velocity="4.01" />
+    <limit lower="-3.14" upper="3.14" effort="300" velocity="4.01" />
   </joint>
 
   <joint name="gripper_joint" type="revolute">
@@ -291,7 +291,7 @@
   </joint>
 
   <joint name="ee_joint" type="fixed">
-    <origin xyz="0.126 0.0 0.0" rpy="0 0 0"/>
+    <origin xyz="0.126 0.0 0.007" rpy="0 0 0"/>
     <parent link="palm_link"/>
     <child link="ee_link"/>
   </joint>

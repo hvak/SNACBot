@@ -418,7 +418,7 @@
     <parent link="hand_link"/>
     <child link="palm_link"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="300" lower="-1.6" upper="1.6" velocity="4.01"/>
+    <limit effort="300" lower="-3.14" upper="3.14" velocity="4.01"/>
   </joint>
   <joint name="gripper_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.04704 0.000306 -0.0208"/>
@@ -442,7 +442,7 @@
     <mimic joint="gripper_joint" multiplier="-0.33" offset="0"/>
   </joint>
   <joint name="ee_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0.126 0.0 0.0"/>
+    <origin rpy="0 0 0" xyz="0.126 0.0 0.007"/>
     <parent link="palm_link"/>
     <child link="ee_link"/>
   </joint>

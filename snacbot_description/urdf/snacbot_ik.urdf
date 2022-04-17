@@ -10,12 +10,6 @@
   <material name="blue">
     <color rgba="0.16470588235294117 0.3215686274509804 0.7450980392156863 1.000"/>
   </material>
-  <material name="aluminum">
-    <color rgba="0.5 0.5 0.5 1"/>
-  </material>
-  <material name="plastic">
-    <color rgba="0.1 0.1 0.1 1"/>
-  </material>
   <link name="world"/>
   <link name="base_link">
     <inertial>
@@ -137,6 +131,39 @@
       </geometry>
     </collision>
   </link>
+  <!-- camera body, with origin at bottom screw mount -->
+  <joint name="camera_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.04 0 0.035"/>
+    <parent link="palm_link"/>
+    <child link="camera_bottom_screw_frame"/>
+  </joint>
+  <link name="camera_bottom_screw_frame"/>
+  <joint name="camera_link_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.010600000000000002 0.0175 0.0125"/>
+    <parent link="camera_bottom_screw_frame"/>
+    <child link="camera_link"/>
+  </joint>
+  <link name="camera_link">
+    <visual>
+      <!-- the mesh origin is at front plate in between the two infrared camera axes -->
+      <origin rpy="1.5707963267948966 0 1.5707963267948966" xyz="0.0043 -0.0175 0"/>
+      <geometry>
+        <mesh filename="package://realsense2_description/meshes/d435.dae"/>
+      </geometry>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 -0.0175 0"/>
+      <geometry>
+        <box size="0.02505 0.09 0.025"/>
+      </geometry>
+    </collision>
+    <inertial>
+      <!-- The following are not reliable values, and should not be used for modeling -->
+      <mass value="0.072"/>
+      <origin xyz="0 0 0"/>
+      <inertia ixx="0.003881243" ixy="0.0" ixz="0.0" iyy="0.000498940" iyz="0.0" izz="0.003879257"/>
+    </inertial>
+  </link>
   <link name="gripper_driving_link">
     <inertial>
       <origin rpy="0 0 0" xyz="-4.267483755260315e-09 7.6050195998832865e-06 0.002017482694919248"/>
@@ -237,7 +264,7 @@
     <parent link="hand_link"/>
     <child link="palm_link"/>
     <axis xyz="1.0 0.0 0.0"/>
-    <limit effort="300" lower="-1.6" upper="1.6" velocity="4.01"/>
+    <limit effort="300" lower="-3.14" upper="3.14" velocity="4.01"/>
   </joint>
   <joint name="gripper_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0.04704 0.000306 -0.0208"/>
@@ -261,7 +288,7 @@
     <mimic joint="gripper_joint" multiplier="-0.33" offset="0"/>
   </joint>
   <joint name="ee_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0.126 0.0 0.0"/>
+    <origin rpy="0 0 0" xyz="0.126 0.0 0.007"/>
     <parent link="palm_link"/>
     <child link="ee_link"/>
   </joint>
