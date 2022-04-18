@@ -11,9 +11,7 @@ import tf
 from sensor_msgs.msg import CameraInfo
 from cv_bridge import CvBridge, CvBridgeError
 from sensor_msgs.msg import Image as msg_Image
-
 from snacknet.srv import SnackGrabService, SnackGrabServiceResponse
-#from snacbot_common.scripts.common import wrap_pi, construct_pose, convert_depth_to_phys_coord_using_realsense
 from snacbot_common.common import *
 import rospkg
 

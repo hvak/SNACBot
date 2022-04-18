@@ -2,6 +2,7 @@
 
 # This code was adapted from this project: https://github.com/mauckc/mouth-open
 
+from sympy import false
 import rospy
 import cv2
 import os
@@ -53,6 +54,9 @@ class Detector:
         gray = cv2.cvtColor(self.rawImage, code=cv2.COLOR_BGR2GRAY)
         faces = self.detector(gray)
         xCenter, yCenter = 0, 0
+        found_open_mouth = False
+
+
         for face in faces:
             landmarks = self.predictor(image=gray, box=face)
             ef_x2, ef_x1 = landmarks.part(57).x, landmarks.part(51).x
@@ -66,23 +70,28 @@ class Detector:
             # cv2.circle(img=self.rawImage, center=(ab_x1,ab_y1), radius=3, color=(0,255, 0), thickness=-1)
             AB = (ab_x2 - ab_x1) * (ab_x2 - ab_x1) + (ab_y2 - ab_y1) * (ab_y2 - ab_y1)
             if EF / AB >= 0.25:      
+                found_open_mouth = True
                 xCenter = int((ef_x1 + ef_x2 + ab_x1 + ab_x2) / 4)          
                 yCenter = int((ef_y1 + ef_y2 + ab_y1 + ab_y2) / 4)
         # cv2.circle(img=self.rawImage, center=(int(xCenter),int(yCenter)), radius=3, color=(255,0, 0), thickness=-1)
         # cv2.imwrite("face.jpg", cv2.cvtColor(self.rawImage,  cv2.COLOR_BGR2RGB))
-        x, y, z = convert_depth_to_phys_coord_using_realsense(xCenter, yCenter,  self.depthImage[yCenter][xCenter]/1000, self._intrinsics)
-        print(x, y , z)
-        #find world frame
-        optical_frame_pose = construct_pose(x, y, z, 0, 0, 0, "camera_aligned_depth_to_color_frame")
 
-        self.tf_listener.waitForTransform("camera_aligned_depth_to_color_frame", "world", rospy.Time.now(), rospy.Duration(1.0))
-        world_pose = self.tf_listener.transformPose("world", optical_frame_pose)
-       
-        quat =  tf.transformations.quaternion_from_euler(0, 0, 0)
-        world_pose.pose.orientation.x = quat[0]
-        world_pose.pose.orientation.y= quat[1]
-        world_pose.pose.orientation.z = quat[2]
-        world_pose.pose.orientation.w = quat[3]
+        world_pose = construct_pose(0,0,0,0,0,0, "world")
+        if found_open_mouth:
+            x, y, z = convert_depth_to_phys_coord_using_realsense(xCenter, yCenter,  self.depthImage[yCenter][xCenter]/1000, self._intrinsics)
+            print(x, y , z)
+            #find world frame
+            optical_frame_pose = construct_pose(x, y, z, 0, 0, 0, "camera_aligned_depth_to_color_frame")
+
+            self.tf_listener.waitForTransform("camera_aligned_depth_to_color_frame", "world", rospy.Time.now(), rospy.Duration(1.0))
+            world_pose = self.tf_listener.transformPose("world", optical_frame_pose)
+
+            quat =  tf.transformations.quaternion_from_euler(0, 0, 0)
+            world_pose.pose.orientation.x = quat[0]
+            world_pose.pose.orientation.y= quat[1]
+            world_pose.pose.orientation.z = quat[2]
+            world_pose.pose.orientation.w = quat[3]
+
         return FaceServiceResponse(world_pose)
 
     

@@ -16,7 +16,6 @@ class SNACBotMoveitInterface(object):
         super(SNACBotMoveitInterface, self).__init__()
 
         moveit_commander.roscpp_initialize(sys.argv)
-        rospy.init_node("snacbot_moveit_interface", anonymous=True)
 
         self.debug = debug
 
@@ -29,7 +28,6 @@ class SNACBotMoveitInterface(object):
         hand_group_name = "snacbot_hand"
         self.hand_group = moveit_commander.MoveGroupCommander(hand_group_name)
 
-        self.display_trajectory_publisher = rospy.Publisher("/move_group/display_planned_path", moveit_msgs.msg.DisplayTrajectory, queue_size=20)
 
         self.planning_frame = self.arm_group.get_planning_frame()
         if debug: print("============ Planning frame: %s" % self.planning_frame)
@@ -67,13 +65,21 @@ class SNACBotMoveitInterface(object):
         return pose
 
     def goal_pose_valid(self, pose):
+
+        if pose.position.x == 0 and pose.position.y == 0 and pose.position.z == 0:
+            return False
+
         self.arm_group.set_pose_target(pose)
         plan = self.arm_group.plan()
         self.arm_group.clear_pose_targets()
         return plan[0]
     
     def goal_position_valid(self, pose):
+
         xyz = [pose.position.x, pose.position.y, pose.position.z]
+        if xyz[0] == 0 and xyz[1] == 0 and xyz[2] == 0:
+            return False
+
         self.arm_group.set_position_target(xyz)
         plan = self.arm_group.plan()
         self.arm_group.clear_pose_targets()
@@ -118,21 +124,13 @@ class SNACBotMoveitInterface(object):
             print("Couldn't go to position goal!")
             return False
 
-
-    #not super useful rn, it seems pose targets display in rviz automatically
-    def display_trajectory(self, plan):
-        display_trajectory = moveit_msgs.msg.DisplayTrajectory()
-        display_trajectory.trajectory_start = self.robot.get_current_state()
-        display_trajectory.trajectory.append(plan[1])
-        # Publish
-        self.display_trajectory_publisher.publish(display_trajectory)
+    def get_current_rpy(self):
+        return self.arm_group.get_current_rpy()
 
     def rotate_waist(self, ang):
         #ang = clamp(ang, -3.14, 3.14)
-        joints = self.arm_group.get_current_joint_values()
-        print(joints)
-        joints[0] = ang
-        success = self.arm_group.go(joints, wait=True)
+        self.arm_group.set_joint_value_target("waist_joint", ang)
+        success = self.arm_group.go(wait=True)
         self.arm_group.stop()
         self.arm_group.clear_pose_targets()
         return success
