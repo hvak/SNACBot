@@ -1,0 +1,3 @@
+[submodule "snacknet/srv/yolov5"]
+	path = snacknet/srv/yolov5
+	url = https://github.com/ultralytics/yolov5
