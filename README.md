@@ -3,7 +3,7 @@ SNACBot is a 5-axis robot arm that autonomously feeds people snacks. It uses com
 
 ![SNACBot](snacbot.PNG)
 
-_video incoming_
+[SNABot Demo](https://www.youtube.com/watch?v=f-vsUyTJYIk&ab_channel=ThomasKrolikowski)
 
 ## Repo Structure
 - `face_detection/` - ROS Service to extract open mouth pose
