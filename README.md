@@ -41,4 +41,4 @@ $ roslaunch snacbot_machine state_machine.launch
 ## Contributors
 - [Hersh Vakharia](https://github.com/hvak)
 - [Audrey Cooke](https://github.com/audeophilic)
-- [Tom Krolikowski](https://github.com/tkroliko)
+- [Tom Krolikowski](https://github.com/tomkrolikowski)
